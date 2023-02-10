@@ -27,10 +27,10 @@ export class Phonebook extends Component {
   };
 
   componentDidMount() {
-    // demo contacts preloader
+    // demo contacts preloader если удалить и почистить ЛС, то ничего не сломается:)
     if (!localStorage.contacts)
       localStorage.setItem('contacts', JSON.stringify(initialLocalStorage));
-    // demo contacts preloader
+    // demo contacts preloader если удалить и почистить ЛС, то ничего не сломается:)
 
     const savedContacts = JSON.parse(localStorage.getItem('contacts'));
 
