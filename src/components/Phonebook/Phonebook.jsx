@@ -11,6 +11,15 @@ import {
   noMatchesNotify,
 } from 'components/Notification/Notification';
 
+// demo contacts
+const initialLocalStorage = [
+  { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+  { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+  { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+  { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+];
+// demo contacts
+
 export class Phonebook extends Component {
   state = {
     contacts: [],
@@ -18,11 +27,19 @@ export class Phonebook extends Component {
   };
 
   componentDidMount() {
+    // demo contacts
+    if (!localStorage.contacts)
+      localStorage.setItem('contacts', JSON.stringify(initialLocalStorage));
+    // demo contacts
+
     const savedContacts = JSON.parse(localStorage.getItem('contacts'));
-    console.log(this.state.contacts);
-    if (savedContacts.length === 0) {
+
+    if (savedContacts) this.setState({ contacts: savedContacts });
+    if (savedContacts && savedContacts.length === 0) {
       noContactsNotify();
-    } else this.setState({ contacts: savedContacts });
+    } else if (!savedContacts) {
+      noContactsNotify();
+    }
   }
 
   componentDidUpdate(prevState, prevProps) {
