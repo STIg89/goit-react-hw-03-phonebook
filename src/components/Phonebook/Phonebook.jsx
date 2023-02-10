@@ -20,9 +20,27 @@ const initialContacts = [
 
 export class Phonebook extends Component {
   state = {
-    contacts: initialContacts,
+    contacts: [],
     filter: '',
   };
+
+  componentDidMount() {
+    const savedContacts = JSON.parse(localStorage.getItem('contacts'));
+    console.log(this.state.contacts);
+    if (savedContacts.length === 0) {
+      noContactsNotify();
+    } else this.setState({ contacts: savedContacts });
+  }
+
+  componentDidUpdate(prevState, prevProps) {
+    const { contacts } = this.state;
+    if (contacts.length === 0) {
+      noContactsNotify();
+    }
+    if (contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(contacts));
+    }
+  }
 
   handleAddContact = ({ name, number }) => {
     if (
@@ -48,14 +66,11 @@ export class Phonebook extends Component {
   filteredContacts = () => {
     const { contacts, filter } = this.state;
     const normalizedFilter = filter.toLowerCase();
-    if (contacts.length === 0) {
-      noContactsNotify();
-      return;
-    }
+
     const filtered = contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter)
     );
-    if (filtered.length === 0) {
+    if (filtered.length === 0 && filter) {
       noMatchesNotify();
     }
     return filtered;
